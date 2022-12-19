@@ -4,7 +4,7 @@ from pydub.utils import get_player_name
 from tempfile import NamedTemporaryFile
 import os
 import subprocess
-from random import choice
+from random import randint
 
 PLAYER = get_player_name()
 
@@ -25,17 +25,19 @@ while True:
     threading.Thread(target=_play_with_ffplay_suppress, args=(sound,)).start()
     while (user := input("Pedra, papel ou tesoura? ").lower().strip()) not in OPTIONS:
         print("Escolha uma opção da lista!")
-    cpu = choice(OPTIONS)
+    cpu = OPTIONS[randint(0, len(OPTIONS) - 1)]
     winner = (3 + OPTIONS.index(user) - OPTIONS.index(cpu)) % 3
-    if winner == 0:
-        print("Empate!")
-    if winner == 1:
-        print("Ganhou!")
-        score += 1
-    if winner == 2:
-        print("Perdeu!")
-        score -= 1
-    while (retry := input("Quer continuar? [SsNn]").lower().strip()) not in "sn":
+    match winner:
+        case 0:
+            print("Empate!")
+        case 1:
+            print("Ganhou!")
+            score += 1
+        case 2:
+            print("Perdeu!")
+            score -= 1
+
+    while (retry := input("Quer continuar? [SsNn] ").lower().strip()) not in "sn":
         print("Erro! Escolha S ou N")
     if retry == "n":
         print("Pontuação total:", score)
