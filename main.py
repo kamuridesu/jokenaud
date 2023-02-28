@@ -6,6 +6,10 @@ import os
 import subprocess
 from random import randint
 
+from io import BytesIO
+import base64
+from conf import AUDIO
+
 PLAYER = get_player_name()
 
 
@@ -15,7 +19,8 @@ def _play_with_ffplay_suppress(seg):
         devnull = open(os.devnull, 'w')
         subprocess.call([PLAYER,"-nodisp", "-autoexit", "-hide_banner", f.name],stdout=devnull, stderr=devnull)
 
-sound = AudioSegment.from_mp3("./audio.mp3")
+
+sound = AudioSegment.from_file(BytesIO(base64.b64decode(AUDIO)))
 
 OPTIONS = ["pedra", "papel", "tesoura"]
 
